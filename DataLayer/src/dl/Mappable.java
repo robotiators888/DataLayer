@@ -1,36 +1,61 @@
 package dl;
 
+import java.nio.MappedByteBuffer;
+
 /**
  * All Data Layer Enabled Objects must implement the Serialize Interface. This
  * interface allows objects to be converted to bytes for storage in a memory map
  * file and then to be retrieved later.
  */
-public interface Serialize {
+public interface Mappable {
 
     /**
-     * This method should be used to convert an object to a byte array so that
-     * the serialized data can be stored in its binary form.
-     * 
-     * @return The binary version of an object as a byte array.
+     * The size of a primitive byte in bytes.
      */
-    public byte[] getBytes();
+    public final static int BYTE_SIZE = 1;
 
     /**
-     * This method is used to calculate the number of bytes that an object
-     * occupies in memory.
+     * The size of a primitive integer in bytes.
+     */
+    public final static int INT_SIZE = 4;
+
+    /**
+     * The size of a primitive long in bytes.
+     */
+    public final static int LONG_SIZE = 8;
+
+    /**
+     * The size of a primitive double in bytes.
+     */
+    public final static int DOUBLE_SIZE = 8;
+
+    /**
+     * Calculates the number of bytes that an object occupies in memory.
      * 
      * @return The size of an object in bytes.
      */
     public int sizeOf();
 
     /**
-     * This method should be used to convert a serialized object back to its
-     * original form.
+     * Writes out the attributes of an object to a memory mapped file for
+     * storage.
      * 
-     * @param object
-     *            A byte array containing a serialized object.
-     * @return An object of the type T where T is any class that implements
-     *         Serialize.
+     * @param mem
+     *            The memory mapped file to write to.
+     * @param index
+     *            The number of bytes to offset where the buffer beings writing.
      */
-    public Object getObject(byte[] object);
+    public void write(MappedByteBuffer mem, int index);
+
+    /**
+     * Reads back attributes from a memory mapped file to reconstruct an object
+     * with equivalent attributes.
+     * 
+     * @param mem
+     *            The memory mapped file to read from.
+     * @param index
+     *            The number of bytes in the buffer to offset where the reading
+     *            begins.
+     */
+    public void read(MappedByteBuffer mem, int index);
 }
