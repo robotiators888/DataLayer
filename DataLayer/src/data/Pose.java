@@ -1,10 +1,10 @@
-package wrappers;
+package data;
 
 import java.nio.MappedByteBuffer;
 
 import disc.data.Waypoint;
 import disc.util.WaypointException;
-import dl.Mappable;
+import utils.Mappable;
 
 /**
  * Data type for storing a robot's pose
