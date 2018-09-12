@@ -271,12 +271,12 @@ public class Pose extends Waypoint implements Mappable {
 
     @Override
     public void write(MappedByteBuffer mem, int index) {
-        mem.putDouble(index,     this.x       );
-        mem.putDouble(index + 1, this.y       );
-        mem.putDouble(index + 2, this.z       );
-        mem.putDouble(index + 3, this.heading );
-        mem.putDouble(index + 4, this.pitch   );
-        mem.putDouble(index + 5, this.roll    );
+        mem.putDouble(index                    , this.x       );
+        mem.putDouble(index + (DOUBLE_SIZE)    , this.y       );
+        mem.putDouble(index + (DOUBLE_SIZE * 2), this.z       );
+        mem.putDouble(index + (DOUBLE_SIZE * 3), this.heading );
+        mem.putDouble(index + (DOUBLE_SIZE * 4), this.pitch   );
+        mem.putDouble(index + (DOUBLE_SIZE * 5), this.roll    );
     }
 
     @Override
