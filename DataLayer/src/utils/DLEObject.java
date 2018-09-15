@@ -42,9 +42,9 @@ public class DLEObject<T extends Mappable> {
      * @param initVal
      *            The initial value of the object to be logged.
      * @param logName
-     *            The name of the log file to be created
+     *            The name of the log file to be created.
      * @throws IOException
-     *             Thrown if the file is not able to be created
+     *             Thrown if the file is not able to be created.
      * @throws FileNotFoundException
      *             Thrown if the log file is not created properly and therefore
      *             cannot be converted into a {@link RandomAccessFile}.
@@ -86,11 +86,11 @@ public class DLEObject<T extends Mappable> {
      * @param initVal
      *            The initial value of the object to be logged.
      * @param logName
-     *            The name of the log file to be created
+     *            The name of the log file to be created.
      * @param logSize
      *            The maximum number of objects that will be stored in the file.
      * @throws IOException
-     *             Thrown if the file is not able to be created
+     *             Thrown if the file is not able to be created.
      * @throws FileNotFoundException
      *             Thrown if the log file is not created properly and therefore
      *             cannot be converted into a {@link RandomAccessFile}.
