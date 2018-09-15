@@ -21,15 +21,20 @@ public class DLEObject<T extends Mappable> {
 
     MappedByteBuffer mem;
 
-    Object[] items;
+    final static byte READ = 1;
+    final static byte WRITE = 1;
 
-    byte[] spare = new byte[52]; // TODO Create header
+    final static int RW = 2;
+    final static int STANDARD_DATA = 10;
 
-    int header;
-    int maxObj;
-    int numObj;
+    final static int HEADER = 8;
+    final static int LOG_TIME = 90000;
+
+    long timeOfObject;
+    
     int objSize;
     int position;
+
 
     /**
      * Constructs the memory mapped file for an object of class {@link T}.
@@ -47,10 +52,9 @@ public class DLEObject<T extends Mappable> {
     public DLEObject(T initVal, String logName)
             throws IOException, FileNotFoundException {
 
-        header = 64;
-        numObj = 0;
-        maxObj = 15000;
-        objSize = initVal.sizeOf();
+        objSize = STANDARD_DATA + initVal.sizeOf();
+
+        int logSize = LOG_TIME * objSize;
 
         File log = new File(logName);
 
@@ -69,12 +73,11 @@ public class DLEObject<T extends Mappable> {
         }
 
         mem = fc.map(FileChannel.MapMode.READ_WRITE, 0,
-                ((objSize * maxObj) + header));
+                ((objSize * logSize) + HEADER));
 
-        mem.putInt(maxObj);
-        mem.putInt(numObj);
+        mem.putInt(position);
         mem.putInt(objSize);
-        mem.put(spare);
+        position += HEADER;
     }
 
     /**
@@ -84,7 +87,7 @@ public class DLEObject<T extends Mappable> {
      *            The initial value of the object to be logged.
      * @param logName
      *            The name of the log file to be created
-     * @param p_maxObj
+     * @param logSize
      *            The maximum number of objects that will be stored in the file.
      * @throws IOException
      *             Thrown if the file is not able to be created
@@ -92,13 +95,10 @@ public class DLEObject<T extends Mappable> {
      *             Thrown if the log file is not created properly and therefore
      *             cannot be converted into a {@link RandomAccessFile}.
      */
-    public DLEObject(T initVal, String logName, int p_maxObj)
+    public DLEObject(T initVal, String logName, int logSize)
             throws IOException, FileNotFoundException {
 
-        header = 64;
-        numObj = 0;
-        maxObj = p_maxObj;
-        objSize = initVal.sizeOf();
+        objSize = STANDARD_DATA + initVal.sizeOf();
 
         File log = new File(logName);
 
@@ -117,12 +117,11 @@ public class DLEObject<T extends Mappable> {
         }
 
         mem = fc.map(FileChannel.MapMode.READ_WRITE, 0,
-                ((objSize * maxObj) + header));
+                ((objSize * logSize) + HEADER));
 
-        mem.putInt(maxObj);
-        mem.putInt(numObj);
+        mem.putInt(position);
         mem.putInt(objSize);
-        mem.put(spare);
+        position += HEADER;
     }
 
     /**
@@ -134,8 +133,17 @@ public class DLEObject<T extends Mappable> {
      * @return The updated object.
      */
     public T get(T t) {
-        position = mem.position();
-        t.read(mem, position);
+        int index = position - t.sizeOf();
+        if (mem.get(index) == WRITE) {
+            try {
+                this.timeOfObject = mem.getLong(index + RW);
+                t.read(mem, index + STANDARD_DATA);
+            } catch (Exception e) {
+                e.printStackTrace();
+             // TODO Exception handling
+            }
+        }
+        // TODO Timeout if the data wasn't written
         return t;
     }
 
@@ -150,9 +158,17 @@ public class DLEObject<T extends Mappable> {
      * @return The updated object.
      */
     public T get(T t, int cycle) {
-        position = mem.position();
-        int location = position - (numObj - (t.sizeOf() * cycle));
-        t.read(mem, location);
+        int index = position - (t.sizeOf() * cycle);
+        if (mem.get(index) == WRITE) {
+            try {
+                this.timeOfObject = mem.getLong(index + RW);
+                t.read(mem, index + STANDARD_DATA);
+            } catch (Exception e) {
+                e.printStackTrace();
+                // TODO Exception handling
+            }
+        }
+        // TODO Timeout if the data wasn't written
         return t;
     }
 
@@ -163,7 +179,14 @@ public class DLEObject<T extends Mappable> {
      *            The object to log.
      */
     public void set(T t) {
-        numObj++;
-        t.write(mem, 0);
+        position += t.sizeOf();
+        try {
+            mem.putLong(position + RW, System.currentTimeMillis());
+            t.write(mem, position + STANDARD_DATA);
+            mem.put(position, WRITE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // TODO Exception handling
+        }
     }
 }
