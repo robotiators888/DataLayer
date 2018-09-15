@@ -44,7 +44,7 @@ public class Mouse implements Mappable {
 
     @Override
     public int sizeOf() {
-        return ((BYTE_SIZE * 5) + (DOUBLE_SIZE));
+        return BYTE_SIZE * 3;
     }
 
     @Override
