@@ -50,8 +50,7 @@ public class Pose extends Waypoint implements Mappable {
     }
 
     /**
-     * Constructor for creating a {@link Pose} with only an x, y, and a
-     * heading.
+     * Constructor for creating a {@link Pose} with only an x, y, and a heading.
      */
     public Pose(double x, double y, double heading) {
         super(x, y, heading);
@@ -218,8 +217,8 @@ public class Pose extends Waypoint implements Mappable {
     }
 
     /**
-     * Comparison to check for an exact match between this {@link Pose} and
-     * a {@link Waypoint}, only checking x, y, and z.
+     * Comparison to check for an exact match between this {@link Pose} and a
+     * {@link Waypoint}, only checking x, y, and z.
      * 
      * @param w
      *            the Waypoint to compare against
@@ -251,8 +250,8 @@ public class Pose extends Waypoint implements Mappable {
     }
 
     /**
-     * Comparison to check for an exact match between this {@link Pose} and
-     * a {@link Waypoint}, only checking heading, roll, and pitch.
+     * Comparison to check for an exact match between this {@link Pose} and a
+     * {@link Waypoint}, only checking heading, roll, and pitch.
      * 
      * @param w
      *            the Waypoint to compare against
@@ -271,22 +270,22 @@ public class Pose extends Waypoint implements Mappable {
 
     @Override
     public void write(MappedByteBuffer mem, int index) {
-        mem.putDouble(index                    , this.x       );
-        mem.putDouble(index + (DOUBLE_SIZE)    , this.y       );
-        mem.putDouble(index + (DOUBLE_SIZE * 2), this.z       );
-        mem.putDouble(index + (DOUBLE_SIZE * 3), this.heading );
-        mem.putDouble(index + (DOUBLE_SIZE * 4), this.pitch   );
-        mem.putDouble(index + (DOUBLE_SIZE * 5), this.roll    );
+        mem.putDouble(index, this.x);
+        mem.putDouble(index + (DOUBLE_SIZE), this.y);
+        mem.putDouble(index + (DOUBLE_SIZE * 2), this.z);
+        mem.putDouble(index + (DOUBLE_SIZE * 3), this.heading);
+        mem.putDouble(index + (DOUBLE_SIZE * 4), this.pitch);
+        mem.putDouble(index + (DOUBLE_SIZE * 5), this.roll);
     }
 
     @Override
     public void read(MappedByteBuffer mem, int index) {
-        this.x       =  mem.getDouble(index                    );
-        this.y       =  mem.getDouble(index + (DOUBLE_SIZE)    );
-        this.z       =  mem.getDouble(index + (DOUBLE_SIZE * 2));
-        this.heading =  mem.getDouble(index + (DOUBLE_SIZE * 3));
-        this.pitch   =  mem.getDouble(index + (DOUBLE_SIZE * 4));
-        this.roll    =  mem.getDouble(index + (DOUBLE_SIZE * 5));
+        this.x = mem.getDouble(index);
+        this.y = mem.getDouble(index + (DOUBLE_SIZE));
+        this.z = mem.getDouble(index + (DOUBLE_SIZE * 2));
+        this.heading = mem.getDouble(index + (DOUBLE_SIZE * 3));
+        this.pitch = mem.getDouble(index + (DOUBLE_SIZE * 4));
+        this.roll = mem.getDouble(index + (DOUBLE_SIZE * 5));
     }
 
 }
