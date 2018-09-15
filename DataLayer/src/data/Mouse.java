@@ -44,18 +44,18 @@ public class Mouse implements Mappable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        mem.put((byte) 1);
-        mem.put((byte) 0);
-        mem.putLong(System.currentTimeMillis());
-        mem.put(dat);
-        
+
+        for (int i : dat) {
+            mem.put(index, this.dat[i]);
+            index++;
+        }
     }
 
     @Override
     public void read(MappedByteBuffer mem, int index) {
-        mem.get(null, (mem.position() - index), 2);
-        mem.getDouble(index + 2);
-        mem.get(dat, (mem.position() - (index + 10)), 3);
+        for (int i : dat) {
+            this.dat[i] = mem.get(index);
+            index++;
+        }
     }
 }
