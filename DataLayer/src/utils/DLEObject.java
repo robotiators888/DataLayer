@@ -13,7 +13,7 @@ import java.nio.channels.FileChannel;
  * shared between classes quickly.
  * 
  * @param <T>
- *            T is any class that extents {@link Mappable} of which an object
+ *            T is any class that extends {@link Mappable} of which an object
  *            exists that needs to have its attributes stored in a memory mapped
  *            file.
  */
