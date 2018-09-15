@@ -7,7 +7,7 @@ import disc.util.WaypointException;
 import utils.Mappable;
 
 /**
- * Data type for storing a robot's pose
+ * A {@link Mappable} data type for storing a robot's pose.
  */
 public class Pose extends Waypoint implements Mappable {
 

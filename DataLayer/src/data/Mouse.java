@@ -10,6 +10,10 @@ import java.nio.MappedByteBuffer;
 
 import utils.Mappable;
 
+/**
+ * This class is a {@link Mappable} hardware interface for an optical mouse
+ * connected to a Linux operating system via a USB port.
+ */
 public class Mouse implements Mappable {
 
     FileInputStream mouse;
@@ -22,6 +26,12 @@ public class Mouse implements Mappable {
 
     byte[] dat = new byte[3];
 
+    /**
+     * Opens the device file for the mouse.
+     * 
+     * @param devID
+     *            The ID of the mouse device file.
+     */
     public Mouse(int devID) {
         fileName = "/c/mouseData" + System.currentTimeMillis();
 
@@ -39,8 +49,9 @@ public class Mouse implements Mappable {
 
     @Override
     public void write(MappedByteBuffer mem, int index) {
+
         try {
-            mouse.read(dat);
+            mouse.read(dat); // Reads the data from the device file.
         } catch (IOException e) {
             e.printStackTrace();
         }
