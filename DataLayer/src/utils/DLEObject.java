@@ -96,7 +96,6 @@ public class DLEObject<T extends Mappable> {
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
-
                     e.printStackTrace();
                 } finally {
                     fc = raf.getChannel();
@@ -149,8 +148,11 @@ public class DLEObject<T extends Mappable> {
      *            The iteration number that t will match.
      * @return The updated object.
      */
-    public T get(T t, int cycle) {
-        int index = mem.getInt(0) - (t.sizeOf() * cycle);
+    public T get(T t, int cycle) throws IllegalArgumentException {
+        int index = HEADER + (t.sizeOf() * cycle);
+        
+        if ((mem.position() - t.sizeOf()) < index) throw new IllegalArgumentException();
+        
         if (mem.get(index) == WRITE) {
             try {
                 this.timeOfObject = mem.getLong(index + RW);
